@@ -1,0 +1,7 @@
+*.qpf
+output_files
+db
+incremental_db
+simulation
+*.vcd
+*.out
