@@ -15,19 +15,19 @@ module cpu (
   input         CLK,
   input         RSTN
   );
-  
+
   wire [3:0] ph;
   wire [15:0] w_pc, w_ir, w_sr1, w_sr2, w_alu, w_dr;
   wire [15:0] r0, r1, r2, r3, r4, r5, r6, r7;
   reg [15:0] regfile_wdata;
   reg pc_write, dr_write, regfile_write;
-  
+
   // imem_addr
   assign imem_addr = w_pc;
-  
+
   // dmem_addr
   assign dmem_addr = w_sr1;
-  
+
   // dmem_wdata
   assign dmem_wdata = w_sr2;
 
@@ -50,9 +50,9 @@ module cpu (
   always @*
   begin
     casex ({ph,w_ir})
-    
-    
-    
+    {`PH3,`LD}:  regfile_write = 1'b1;
+    {`PH3,`ADD}: regfile_write = 1'b1;
+    {`PH3,`LI}:  regfile_write = 1'b1;
     default:     regfile_write = 1'b0;
     endcase
   end
@@ -61,7 +61,7 @@ module cpu (
   always @*
   begin
     casex ({ph,w_ir})
-    
+    {`PH2,`ST}:  dmem_write = 1'b1;
     default:    dmem_write = 1'b0;
     endcase
   end
@@ -70,7 +70,7 @@ module cpu (
   always @*
   begin
     casex ({ph,w_ir})
-    
+    {`PH2,`LD}: dr_write = 1'b1;
     default:    dr_write = 1'b0;
     endcase
   end
@@ -85,10 +85,10 @@ module cpu (
   end
 
   sm sm (
-    .q(ph), 
+    .q(ph),
     .start(start),
     .stop(stop),
-    .CLK(CLK), 
+    .CLK(CLK),
     .RSTN(RSTN)
   );
 
@@ -103,7 +103,7 @@ module cpu (
 
   reg16 ir (
     .q(w_ir),
-    .load(     ),
+    .load(ph[0]),
     .d(imem_rdata),
     .CLK(CLK),
     .RSTN(RSTN)
@@ -127,7 +127,7 @@ module cpu (
 
   muxreg16 sr1 (
     .q(w_sr1),
-    .load(     ),
+    .load(ph[1]),
     .d0(r0),
     .d1(r1),
     .d2(r2),
@@ -136,14 +136,14 @@ module cpu (
     .d5(r5),
     .d6(r6),
     .d7(r7),
-    .sel(          ),
+    .sel(w_ir[10:8]),
     .CLK(CLK),
     .RSTN(RSTN)
   );
 
   muxreg16 sr2 (
     .q(w_sr2),
-    .load(     ),
+    .load(ph[1]),
     .d0(r0),
     .d1(r1),
     .d2(r2),
@@ -152,7 +152,7 @@ module cpu (
     .d5(r5),
     .d6(r6),
     .d7(r7),
-    .sel(         ),
+    .sel(w_ir[7:5]),
     .CLK(CLK),
     .RSTN(RSTN)
   );
