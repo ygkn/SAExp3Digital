@@ -10,9 +10,9 @@ module alu (
   input CLK,
   input RSTN
   );
-  
+
   wire [15:0] imm8 = {{8{ir[7]}},ir[7:0]};
-  
+
   always @(posedge CLK or negedge RSTN)
   begin
     if (!RSTN)
@@ -22,10 +22,10 @@ module alu (
     else
     begin
       casex ({ph,ir})
-      {`PH2,`ADD}: q <= 
-      {`PH2,`LI}:  q <= 
+      {`PH2,`ADD}: q <= sr1 + sr2;
+      {`PH2,`LI}:  q <= imm8;
       {`PH2,`B}:   q <= pc + imm8;
-      {`PH2,`BNZ}: 
+      {`PH2,`BNZ}: q <= sr1 != 0 ? pc + imm8 : pc;
       endcase
     end
   end
