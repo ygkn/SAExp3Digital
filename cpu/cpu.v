@@ -53,6 +53,8 @@ module cpu (
     {`PH3,`LD}:  regfile_write = 1'b1;
     {`PH3,`ADD}: regfile_write = 1'b1;
     {`PH3,`LI}:  regfile_write = 1'b1;
+    {`PH3,`MLT}: regfile_write = 1'b1;
+    {`PH3,`SGT}: regfile_write = 1'b1;
     default:     regfile_write = 1'b0;
     endcase
   end

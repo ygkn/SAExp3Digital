@@ -26,6 +26,8 @@ module alu (
       {`PH2,`LI}:  q <= imm8;
       {`PH2,`B}:   q <= pc + imm8;
       {`PH2,`BNZ}: q <= sr1 != 0 ? pc + imm8 : pc;
+      {`PH2,`SGT}: q <= sr1 > sr2 ? 'hffff : 'h0000;
+      {`PH2,`MLT}: q <= sr1 * sr2;
       endcase
     end
   end
