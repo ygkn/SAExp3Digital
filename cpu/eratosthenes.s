@@ -1,46 +1,61 @@
 # [1] * 100
 # r0 ずっと 0
-# r1 メモリのアドレス
-# r2 書き込む定数
-# r3 アドレスの増分値
-# r4 終了判定に使う定数
+# r1 ずっと 1
+# r2 アドレス
 
-	LI  r0, 0
-	LI	r1,	0
-	LI	r2,	1
-	LI	r3,	1
-	LI	r4,	-101
-LP1:	ST		(r1),	r2
-	ADD	r1,	r1,	r3
-	ADD	r5,	r1,	r4
-	BNZ	r5,	LP1:
-
-# r1 操作中のメモリのアドレス
-# r2 値
-# r3 アドレスの増分値
 # r4 終了判定に使う定数
 # r5 終了判定
-# r6 素数の数
-# r7 埋める時のメモリのアドレス
-#
-	LI	r1,	0
-	LI	r2,	0
-	LI	r3,	1
-	LI	r4,	100
-	LI	r6,	0
-LP2:	LD	r1,	r2
-	BNZ	r2,	CON:
 
-	ADD	r7,	r1, r0
-LP3:	MLT	r7,	r7,	r7
-	ADD	r6,	r3, r6
-	ST		(r7),	r2 # BNZ があったので r2 は 0
-	ADD	r7,	r1,	r7
-	SGT	r5,	r7,	r4
+
+	LI  r0, 0
+	LI	r1,	1
+	LI	r2,	2
+
+	LI	r4,	100
+
+	ST	(r0),	r0
+	ST	(r1),	r0
+
+LP1:	ST		(r2),	r1
+	ADD	r2,	r2,	r1
+
+	SGT	r5,	r4,	r2
+	BNZ	r5,	LP1:
+
+# r0 ずっと 0
+# r1 ずっと 1
+
+# r2 アドレス
+# r3 値
+
+# r4 終了判定に使う定数
+# r5 終了判定
+
+# r6 埋める時のメモリのアドレス
+
+# r7 素数の数
+
+	LI	r2,	2
+
+	LI	r7,	0
+
+LP2:	LD	r3,	(r2)
+
+	BZ	r3,	CON:
+
+	ADD	r7,	r7, r1
+
+	MLT	r6,	r2,	r2
+
+LP3:	ST		(r6),	r0
+
+	ADD	r6,	r6,	r2
+
+	SGT	r5,	r4,	r6
 	BNZ	r5,	LP3:
 
-CON:	ADD	r1,	r3,	r1
-	SGT	r5,	r1,	r4
+CON:	ADD	r2,	r2,	r1
+	SGT	r5,	r4,	r2
 	BNZ	r5,	LP2:
 
 HLT:	B	HLT:
