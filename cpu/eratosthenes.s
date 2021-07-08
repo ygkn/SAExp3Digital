@@ -13,9 +13,6 @@
 
 	LI	r4,	100
 
-	ST	(r0),	r0
-	ST	(r1),	r0
-
 LP1:	ST		(r2),	r1
 	ADD	r2,	r2,	r1
 
