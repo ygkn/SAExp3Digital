@@ -42,6 +42,7 @@ module cpu (
     casex ({ph,w_ir})
     {`PH3,`B}:   pc_write = 1'b1; // B
     {`PH3,`BNZ}: pc_write = 1'b1; // BNZ
+    {`PH3,`BZ}:  pc_write = 1'b1; // BZ
     default:     pc_write = 1'b0;
     endcase
   end
